@@ -5,9 +5,9 @@ import * as actions from './flux/actions';
 // Create a new Dispatcher with a callback function
 const controlPanelDispatcher = new Dispatcher();
 
-controlPanelDispatcher.register(action => {
-    console.log(`Received action: ${action}`);
-});
+// controlPanelDispatcher.register(action => {
+//     console.log(`Received action: ${action}`);
+// });
 
 
 // Add eventListener to input and fontSize elements on event input and change
@@ -35,13 +35,22 @@ document.forms.fontSizeForm.fontSize.forEach( radioBtn => {
 class UserPrefsStore extends Store {
 
     getInitialState() {
-        return {
+
+        console.log(`UserPrefsStore: ${JSON.stringify(localStorage['preferences'])}`)
+        return localStorage['preferences']  ? JSON.parse(localStorage['preferences']) : {
             userName: '',
             fontSize: 'small'
         };
+
+//        return {
+//            userName: '',
+//            fontSize: 'small'
+//        };
     }
 
     __onDispatch(action) {
+
+        console.log(`__onDispatch(${JSON.stringify(action)}`);
         switch(action.type) {
             case actions.UPDATE_USERNAME:
                 this.__state.userName = action.value;
@@ -63,16 +72,18 @@ class UserPrefsStore extends Store {
 
 
 const userPrefsStore  = new UserPrefsStore(controlPanelDispatcher);
+
 userPrefsStore.addListener((state) => {
     console.log('The current state is: ', state);
     render(state);
+    localStorage['preferences'] = JSON.stringify(state);
 });
 
 
 const render = ({ userName, fontSize }) => {
     document.getElementById('userName').innerText = userName;
     document.getElementsByClassName('container')[0].style.fontSize = fontSize === 'small' ? '16px' : '24px';
-    document.forms.fontSizeForm.fontSize.valueOf = fontSize;
+    document.forms.fontSizeForm.fontSize.value = fontSize;
 };
 
-
+render(userPrefsStore.getUserPreferences());

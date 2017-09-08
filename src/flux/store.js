@@ -11,6 +11,7 @@ export class Store {
     }
 
     getInitialState() {
+        console.log('Store: getInitialState()');
         throw new Error('Subclasses must override getInitialState method of a Flux Store');
     }
 
