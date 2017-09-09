@@ -32,7 +32,13 @@ document.forms.fontSizeForm.fontSize.forEach( radioBtn => {
 //
 // Extended Store class
 //
-class UserPrefsStore extends Store {
+export class UserPrefsStore extends Store {
+
+    constructor(dispatcher) {
+        super(dispatcher);
+        this.name = 'UserPrefsStore';
+        console.log(`Instance of UserPrefsStore: ${this instanceof UserPrefsStore}, name(${this.name})`);
+    }
 
     getInitialState() {
 
@@ -41,11 +47,6 @@ class UserPrefsStore extends Store {
             userName: '',
             fontSize: 'small'
         };
-
-//        return {
-//            userName: '',
-//            fontSize: 'small'
-//        };
     }
 
     __onDispatch(action) {
@@ -86,4 +87,5 @@ const render = ({ userName, fontSize }) => {
     document.forms.fontSizeForm.fontSize.value = fontSize;
 };
 
+//
 render(userPrefsStore.getUserPreferences());
